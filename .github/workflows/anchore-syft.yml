@@ -1,0 +1,29 @@
+name: Generar SBOM con Syft
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  sbom-generation:
+    runs-on: ubuntu-latest
+    steps:
+      
+name: Checkout del código
+      uses: actions/checkout@v4
+
+      
+name: Escanear repositorio con Syft
+      uses: anchore/sbom-action@v0
+      with:
+        path: "."
+        format: "spdx-json"
+        output-file: "sbom.spdx.json"
+
+      
+name: Subir el SBOM como Artefacto
+      uses: actions/upload-artifact@v4
+      with:
+        name: sbom-spdx-json
+        path: sbom.spdx.json
